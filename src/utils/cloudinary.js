@@ -11,16 +11,21 @@ const uploadOnCloudinary=async(localFilePath)=>{
     try{
         if(!localFilePath)return null;
         //upaload the file on cloudinary
-        cloudinary.uploader.upload(localFilePath,{
+        const response=await cloudinary.uploader.upload(localFilePath,{
             resource_type:"auto",  
         });
         //file has been upload on cloudinary successfully
         console.log("file is uploaded on cloudinary",response.url);
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath);
+        }
         return response;
 
     }catch(error){
-        fs.unlinkSync(localFilePath) //remove the locally saves temp file as the upload on cloudinary failed    
-
+        console.error("Cloudinary upload failed:", error);
+        if (fs.existsSync(localFilePath)) {
+            fs.unlinkSync(localFilePath); //remove the locally saves temp file as the upload on cloudinary failed    
+        }
         return null;
     }
 }

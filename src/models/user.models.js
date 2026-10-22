@@ -49,10 +49,9 @@ const userSchema=new mongoose.Schema({
      
 },{timestamps:true})
 
-userSchema.pre("save",async function (next){
-    if(!this.isModified("password")) return next();
-    thid.password=bcrypt.hash(this.password,10)
-    next()
+userSchema.pre("save", async function () {
+    if (!this.isModified("password")) return;
+    this.password = await bcrypt.hash(this.password, 10);
 })
 
 //hm methos khud se bna skte hain custom methosds
@@ -61,8 +60,8 @@ userSchema.methods.isPasswordCorrect=async function (password){
     return await bcrypt.compare(password,this.password)
 }
 
-userSchema.methods.generateAccessToekn=function(){
-    jwt.sign(
+userSchema.methods.generateAccessToken=function(){
+    return jwt.sign(
         {
             _id:this._id,
             email:this.email,
@@ -76,7 +75,7 @@ userSchema.methods.generateAccessToekn=function(){
 
     )
 }
-userSchema.methods.generateRefreshToekn=function(){
+userSchema.methods.generateRefreshToken=function(){
     return jwt.sign(
        {
             _id:this._id,
