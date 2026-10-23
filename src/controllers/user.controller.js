@@ -1,5 +1,5 @@
 import {asyncHandler} from "../utils/asyncHandler.js";
-import {user} from "../models/user.models.js"; 
+import {User} from "../models/user.models.js"; 
 import {ApiError} from "../utils/ApiError.js";
 import {uploadOnCloudinary} from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -19,7 +19,7 @@ const registerUser=asyncHandler(async(req,res)=>{
         throw new ApiError(400,"All fields are required")
     }
     //check if user already exist: user name, email
-    const existedUser =await user.findOne({
+    const existedUser =await User.findOne({
         $or:[{username},{email}]
     })
     if(existedUser){
@@ -45,7 +45,7 @@ const registerUser=asyncHandler(async(req,res)=>{
     }
 
     //create user object- create entry in db
-    const newUser = await user.create({
+    const newUser = await User.create({
         fullName,
         email,
         username,
@@ -57,7 +57,7 @@ const registerUser=asyncHandler(async(req,res)=>{
    
 
     //remove password and refresh token field from response
-     const createdUser = await user.findById(newUser._id).select(
+     const createdUser = await User.findById(newUser._id).select(
         "-password -refreshToken" //kya kya htana h
     )
     //Check for user creation
