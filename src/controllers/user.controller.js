@@ -90,7 +90,7 @@ const registerUser=asyncHandler(async(req,res)=>{
     )
 
     
-    })
+})
 
 const loginUser=asynHandler(async(req,res)=>{
     //get user details form req body 
