@@ -459,5 +459,6 @@ export {registerUser,
     getCurrentUser,
     updateAccountDetails,
     updateAvatar,
-    updateCoverImage
+    updateCoverImage,
+    getUserChannelProfile
 }
